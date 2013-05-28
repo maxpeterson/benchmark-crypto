@@ -14,16 +14,17 @@ cryptoAES = AES.new(SECRET_KEY, AES.MODE_CBC, IV)
 BLOCK_SIZE = 16
 PADDING = '{'
 
+
 def _random_noise(len):
     return ''.join(chr(random.randint(0, 0xFF)) for i in range(len))
+
 
 def _pad_text(s, block_size, padding):
     return s + (block_size - len(s) % block_size) * padding
 
 
 class Benchmark_Crypt(benchmark.Benchmark):
-
-    each = 10 # allows for differing number of runs
+    each = 10
 
     def setUp(self):
         self.input_text = []
@@ -37,22 +38,24 @@ class Benchmark_Crypt(benchmark.Benchmark):
                     simpleAES.encrypt(plain_text)
                 )
                 self.crypto_aes_encrypted_text.append(
-                    cryptoAES.encrypt(_pad_text(plain_text, BLOCK_SIZE, PADDING))
+                    cryptoAES.encrypt(
+                        _pad_text(plain_text, BLOCK_SIZE, PADDING)
+                    )
                 )
 
-    def test_simple_aes_encrypt(self):
+    def test_simpleaes_encrypt(self):
         for text in self.input_text:
             simpleAES.encrypt(text)
 
-    def test_simple_aes_decrypt(self):
+    def test_simpleaes_decrypt(self):
         for text in self.simple_aes_encrypted_text:
             simpleAES.decrypt(text)
 
-    def test_simple_crypto_encrypt(self):
+    def test_pycrypto_encrypt(self):
         for text in self.input_text:
             cryptoAES.encrypt(_pad_text(text, BLOCK_SIZE, PADDING))
 
-    def test_simple_crypto_decrypt(self):
+    def test_pycrypto_decrypt(self):
         for text in self.crypto_aes_encrypted_text:
             cryptoAES.decrypt(text).rstrip(PADDING)
 

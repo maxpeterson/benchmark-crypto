@@ -67,7 +67,7 @@ class Benchmark_Crypt(benchmark.Benchmark):
 
     def setUp(self):
         self.input_text = []
-        for input_len in xrange(2, 128):
+        for input_len in xrange(5, 1040, 5):
             for times in xrange(3):
                 plain_text = _random_noise(input_len)
                 self.input_text.append(plain_text)
